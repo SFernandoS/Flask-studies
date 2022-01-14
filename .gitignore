@@ -14,6 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
+flask/
 lib/
 lib64/
 parts/
