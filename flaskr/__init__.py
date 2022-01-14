@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from . import db
 
 def create_app(test_config=None):
     #Criação e configuração do app
@@ -31,5 +32,7 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
+    db.init_app(app)
 
     return app
+
