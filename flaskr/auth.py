@@ -1,4 +1,3 @@
-from crypt import methods
 import functools
 
 from flask import (
@@ -10,7 +9,7 @@ from flaskr.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@bp.route('/register', methods=('GET','POST'))
+@bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
         username = request.form['username']
@@ -19,21 +18,22 @@ def register():
         error = None
 
         if not username:
-            error = 'É necessário um nome de usuário'
+            error = 'O nome de usuário é necessário.'
         elif not password:
-            error = 'É necessário uma palavra passa'
+            error = 'A senha é necessária.'
 
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)"
+                    "INSERT INTO user (username, password) VALUES (?, ?)",
                     (username, generate_password_hash(password)),
                 )
                 db.commit()
             except db.IntegrityError:
-                error = f"O usuário {username} ja esta cadastrado"
+                error = f"O {username} já está regitrado."
             else:
-                return redirect(url_for('auth.login'))
+                return redirect(url_for("auth.login"))
+
         flash(error)
 
     return render_template('auth/register.html')
@@ -50,9 +50,9 @@ def login():
         ).fetchone()
 
         if user is None:
-            error = 'Incorrect username.'
+            error = 'Nome de usuário incorreto.'
         elif not check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
+            error = 'Senha incorreta.'
 
         if error is None:
             session.clear()
